@@ -116,15 +116,15 @@ It includes:
 
 ### Home Page
 
-![QuizNova Home Page](QuizNova/home.png)
+![QuizNova Home Page](home.png)
 
 ### Quiz History
 
-![QuizNova History](QuizNova/quiz_history.png)
+![QuizNova History](quiz_history.png)
 
 ### Leaderboard
 
-![QuizNova Leaderboard](QuizNova/leaderboard.png)
+![QuizNova Leaderboard](leaderboard.png)
 
 > **Note:** Add your three screenshots to a `screenshots` folder in the
 > repository using the filenames `home.png`, `history.png`, and
