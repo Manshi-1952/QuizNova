@@ -1,0 +1,229 @@
+﻿@model QuizNova.ViewModels.QuizViewModel
+
+@{
+    var q = Model.Questions[Model.CurrentQuestion];
+}
+
+<div class="container mt-5">
+
+    <div class="card shadow-lg p-5">
+
+        <h3>
+
+            Question @(Model.CurrentQuestion + 1)
+            of @Model.Questions.Count
+
+        </h3>
+
+        <hr>
+
+        <h4>
+
+            @q.QuestionText
+
+        </h4>
+
+        <form asp-action="Next" method="post">
+
+            <input type="hidden" asp-for="UserName" />
+
+            <input type="hidden" asp-for="CategoryId" />
+
+            <input type="hidden" asp-for="CurrentQuestion" />
+
+            <input type="hidden" asp-for="Score" />
+
+            <input type="hidden" asp-for="IsSubmitted" />
+
+            <input type="hidden" asp-for="ShowExplanation" />
+            
+            <input type="hidden" asp-for="CorrectAnswer" />
+            
+            <input type="hidden" asp-for="Explanation" />
+            
+            <input type="hidden" asp-for="TotalQuestions" />
+
+            <div class="mt-4">
+
+                <label class="option d-block">
+                    <input type="radio"
+                           asp-for="SelectedAnswer"
+                           value="A"
+                           disabled="@Model.IsSubmitted" />
+                    @q.OptionA
+                </label>
+
+                <label class="option d-block">
+                    <input type="radio"
+                           asp-for="SelectedAnswer"
+                           value="B"
+                           disabled="@Model.IsSubmitted" />
+                    @q.OptionB
+                </label>
+
+                <label class="option d-block">
+                    <input type="radio"
+                           asp-for="SelectedAnswer"
+                           value="C"
+                           disabled="@Model.IsSubmitted" />
+                    @q.OptionC
+                </label>
+
+                <label class="option d-block">
+                    <input type="radio"
+                           asp-for="SelectedAnswer"
+                           value="D"
+                           disabled="@Model.IsSubmitted" />
+                    @q.OptionD
+                </label>
+
+
+                @if (Model.ShowExplanation)
+                {
+                    if (Model.SelectedAnswer == Model.CorrectAnswer)
+                    {
+                        <div class="alert alert-success mt-3">
+                            ✅ Correct!
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-danger mt-3">
+                            ❌ Wrong!
+                            <br />
+                            <strong>Correct Answer:</strong> @Model.CorrectAnswer
+                        </div>
+                    }
+
+                    <div class="alert alert-info">
+                        <strong>Explanation:</strong>
+                        @Model.Explanation
+                    </div>
+                }
+             
+
+            </div>
+
+            <div class="text-center mb-3">
+
+                <h5>
+                    ⏱️ Time Left:
+                    <span id="timer">15</span> sec
+                </h5>
+
+            </div>
+
+            <div class="mt-4 d-flex justify-content-between">
+
+                <button type="button"
+                        class="btn btn-warning"
+                        id="btn-lifeline"
+                        onclick="lifeLine()">
+
+                    50-50
+
+                </button>
+
+                @if (!Model.IsSubmitted)
+                {
+                    <button class="btn btn-primary">
+                        ✅ Submit Answer
+                    </button>
+                }
+                else
+                {
+                    <button class="btn btn-success">
+                        ➜ Next Question
+                    </button>
+                }
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+@* 
+<div class="text-center mt-3">
+
+    <h5>
+
+        Time Left
+
+        <span id="timer">
+
+            15
+
+        </span>
+
+        sec
+
+    </h5>
+
+</div> *@
+
+
+<script>
+    let time = 15;
+    let t = document.getElementById("timer");
+
+    @if (Model.IsSubmitted)
+        {
+            <text>
+                    time = 999;
+            </text>
+    }
+
+        let timer = setInterval(function() {
+
+            if (time > 900)
+                return;
+
+            time--;
+
+            t.innerHTML = time;
+
+            if (time <= 0) {
+
+                clearInterval(timer);
+
+                document.forms[0].submit();
+
+            }
+
+        }, 1000);
+
+    let used = false;
+
+    function lifeLine() {
+
+        console.log("Button clicked");
+
+        if (used) {
+            alert("Already Used");
+            return;
+        }
+
+        used = true;
+
+        let radios = document.querySelectorAll(".option");
+
+        console.log("Found:", radios.length);
+
+        radios.forEach((item, index) => {
+            console.log(index, item);
+        });
+
+        radios[1].style.display = "none";
+        radios[1].querySelector("input[type='radio']").disabled = true;
+
+        radios[3].style.display = "none";
+        radios[3].querySelector("input[type='radio']").disabled = true;
+
+        let btn = document.getElementById("btn-lifeline");
+        if (btn) btn.disabled = true;
+
+        console.log("Hidden and disabled");
+    }
+</script>

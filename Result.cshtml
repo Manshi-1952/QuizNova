@@ -1,0 +1,105 @@
+﻿@model QuizNova.Models.Result
+
+@{
+    ViewData["Title"] = "Quiz Result";
+}
+
+<div class="container mt-5">
+
+    <div class="card shadow-lg border-0 rounded-4 p-5 text-center">
+
+        <h1 class="text-success">🎉 Quiz Completed!</h1>
+
+        <h3 class="mt-4">
+            Congratulations,
+            <span class="text-primary">@Model.UserName</span>
+        </h3>
+
+        <div class="display-2 fw-bold mt-4 text-primary">
+            @Model.Score / @ViewBag.TotalQuestions
+        </div>
+
+        <h4>Correct Answers</h4>
+
+        <div class="progress mt-3" style="height:25px;">
+
+            @{
+                double percent = ((double)Model.Score / (int)ViewBag.TotalQuestions) * 100;
+            }
+
+            <div class="progress-bar bg-success"
+                 style="width:@percent%">
+                @percent.ToString("0")%
+            </div>
+
+        </div>
+
+        <p class="text-muted mt-3">
+            Date:
+            @Model.QuizDate.ToString("dd MMM yyyy hh:mm tt")
+        </p>
+
+        @if (Model.Score >= 2)
+        {
+            <span class="badge bg-success fs-6">
+                Passed ✅
+            </span>
+        }
+        else
+        {
+            <span class="badge bg-danger fs-6">
+                Keep Practicing 📚
+            </span>
+        }
+
+        <br /><br />
+
+
+        <div class="mt-4">
+
+            <p><strong>Category:</strong> @ViewBag.Category</p>
+
+            <p><strong>Accuracy:</strong> @ViewBag.Accuracy.ToString("0")%</p>
+
+            <p><strong>Time Limit:</strong> 15 Seconds / Question</p>
+
+        </div>
+
+
+        @if (ViewBag.Accuracy >= 90)
+        {
+            <div class="alert alert-success mt-3">
+                🏆 Quiz Master
+            </div>
+        }
+        else if (ViewBag.Accuracy >= 70)
+        {
+            <div class="alert alert-primary mt-3">
+                🥈 Smart Learner
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-warning mt-3">
+                📚 Keep Practicing
+            </div>
+        }
+
+        <a asp-controller="Home"
+           asp-action="Index"
+           class="btn btn-primary">
+            Play Again
+        </a>
+
+
+        <a asp-controller="Leaderboard"
+           asp-action="Index"
+           class="btn btn-dark ms-2">
+
+            🏆 Leaderboard
+
+        </a>
+
+    </div>
+
+</div>
